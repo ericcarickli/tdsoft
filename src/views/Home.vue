@@ -27,12 +27,11 @@
               {{ this.informations["country_code"] }}
             </v-list-item-title>
             <v-list-item-subtitle
-              >{{ this.informations["weather"]["description"] }},
-              <h9 v-if="this.informations['pod'] === 'd'"
-                >está de dia.</h9
-              >
+              >{{ this.informations["weather"]["description"]}}<span v-if="this.informations['pod']">, </span>
+              <h9 v-if="this.informations['pod'] === 'd'">está de dia.</h9>
               <h9 v-else-if="this.informations['pod'] === 'n'">está de noite.</h9>
-              <h9 v-else></h9>
+              <h9 class="red--text" v-else> Cidade não encontrada, 
+               verifique se digitou tudo certo.</h9>
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -113,7 +112,7 @@ export default {
       },
       iconText: "",
       time: 0,
-      items: ['Brasil', 'Estados Unidos da ', 'CA', 'UK'],
+      items: ['BR', 'US', 'CA', 'UK'],
 
       informations: {
         city_name: '',
