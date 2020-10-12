@@ -1,24 +1,34 @@
 <template>
   <div class="home">
-    <div class="container">
-      <form @submit.prevent="Buscar">
-        <label>Cidade</label>
-        <input type="text" placeholder="Cidade" v-model="infoData.city" />
-        <label>Estado</label>
-        <input type="text" placeholder="Estado" v-model="infoData.state" />
-        <label>País</label>
-        <v-select
-          v-model="infoData.country"
-          :items="items"
-          item-text="country"
-          item-value="abbr"
-          label="Selecione o país"
-          dense
-          solo
-        ></v-select>
+    <v-container>
+      <v-row>
+        <v-flex md8 class="mx-auto">
+          <v-col cols="12" md="10">
+            <form @submit.prevent="Buscar">
+              <label margin-left="10px">Cidade</label>
+              <input type="text" placeholder="Cidade" v-model="infoData.city" />
+              <label>Estado</label>
+              <input
+                type="text"
+                placeholder="Estado"
+                v-model="infoData.state"
+              />
+              <label>País</label>
+              <v-select
+                v-model="infoData.country"
+                :items="items"
+                item-text="country"
+                item-value="abbr"
+                label="Selecione o país"
+                dense
+                solo
+              ></v-select>
 
-        <button class="waves-effect waves-light btn-small">Buscar</button>
-      </form>
+              <button class="waves-effect waves-light btn-small">Buscar</button>
+            </form>
+          </v-col>
+        </v-flex>
+      </v-row>
 
       <v-card class="mx-auto" max-width="400">
         <v-list-item two-line>
@@ -97,7 +107,7 @@
 
         <v-divider></v-divider>
       </v-card>
-    </div>
+    </v-container>
   </div>
 </template>
 
