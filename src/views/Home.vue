@@ -2,8 +2,8 @@
   <div class="home">
     <v-container>
       <v-row>
-        <v-flex md8 class="mx-auto">
-          <v-col cols="12" md="10">
+        <v-flex md7 class="mx-auto">
+          <v-col cols="12" md="12">
             <form @submit.prevent="Buscar">
               <label margin-left="10px">Cidade</label>
               <input type="text" placeholder="Cidade" v-model="infoData.city" />
