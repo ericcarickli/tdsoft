@@ -5,10 +5,12 @@
         <v-flex md7 class="mx-auto">
           <v-col cols="12" md="12">
             <form @submit.prevent="Buscar">
+              <div><h9 class="red--text">
+                {{ this.error }}</h9></div>
               <label margin-left="10px">Cidade</label>
-              <input type="text" placeholder="Cidade" v-model="infoData.city" />
+              <input required type="text" placeholder="Cidade" v-model="infoData.city" />
               <label>Estado</label>
-              <input
+              <input 
                 type="text"
                 placeholder="Estado"
                 v-model="infoData.state"
@@ -25,6 +27,12 @@
               ></v-select>
 
               <button class="waves-effect waves-light btn-small">Buscar</button>
+              <v-btn
+              v-on:click="this.locator"
+              class="col-md-2 offset-sm-1"
+                elevation="2"
+                x-small
+              >Minha Localização</v-btn>
             </form>
           </v-col>
         </v-flex>
@@ -35,7 +43,6 @@
           <v-list-item-content>
             <v-list-item-title class="headline">
               {{ this.informations["city_name"] }}
-              {{ this.informations["country_code"] }}
             </v-list-item-title>
             <v-list-item-subtitle
               >{{ this.informations["weather"]["description"]
@@ -114,6 +121,8 @@
 <script>
 // @ is an alias to /src
 import Climate from "../services/getClimate";
+import ClimateByCoord from "../services/GetClimateByCoord";
+
 
 export default {
   name: "Home",
@@ -126,6 +135,7 @@ export default {
         country: "BR",
       },
       iconText: "",
+      error: "",
       time: 0,
       items: [
         { country: "Afeganistão", abbr: "AF" },
@@ -394,22 +404,54 @@ export default {
   },
 
   mounted() {
-    this.Buscar();
+    this.locator();
   },
 
   methods: {
     Buscar() {
+
+          
       Climate.climate(this.infoData).then((resposta) => {
-        let tudo = resposta.data;
-        let esp = tudo.data;
-        let climateInfo = esp[0];
-        console.log(esp);
-        this.informations = climateInfo;
-        this.iconText =
-          "https://www.weatherbit.io/static/img/icons/" +
-          this.informations["weather"]["icon"] +
-          ".png";
+        if(resposta.status != 200){ 
+          this.error = "Cidade não encontrada, verifique se digitou tudo certo.";}
+        else {
+          let tudo = resposta.data;
+          let esp = tudo.data;
+          let climateInfo = esp[0];
+          console.log(esp);
+          this.informations = climateInfo;
+          this.iconText =
+            "https://www.weatherbit.io/static/img/icons/" +
+            this.informations["weather"]["icon"] +
+            ".png";
+          this.error = "";
+        }
       });
+    },
+
+    locator() {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          console.log(position.coords.latitude);
+          console.log(position.coords.longitude);
+
+          ClimateByCoord.climate(position.coords.latitude, position.coords.longitude).then(resposta => {
+            let tudo = resposta.data;
+            let esp = tudo.data;
+            let climateInfo = esp[0];
+            console.log(esp);
+            this.informations = climateInfo;
+            this.iconText =
+              "https://www.weatherbit.io/static/img/icons/" +
+              this.informations["weather"]["icon"] +
+              ".png";
+          })
+
+        },
+        error => {
+          console.log(error.message);
+        },
+      )   
     },
   },
 };

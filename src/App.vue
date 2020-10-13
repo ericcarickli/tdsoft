@@ -13,7 +13,7 @@ import Climate from './services/getClimate'
 
 export default {
   name: 'App',
-  components: { Navbar },
+  components: { Navbar},
   data: () => ({
     //
   })
