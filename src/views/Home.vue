@@ -2,15 +2,21 @@
   <div class="home">
     <v-container>
       <v-row>
-        <v-flex md7 class="mx-auto">
-          <v-col cols="12" md="12">
+        <v-flex md12>
+          <v-col class="pt-3" md="6">
             <form @submit.prevent="Buscar">
-              <div><h9 class="red--text">
-                {{ this.error }}</h9></div>
+              <div>
+                <h9 class="red--text"> {{ this.error }}</h9>
+              </div>
               <label margin-left="10px">Cidade</label>
-              <input required type="text" placeholder="Cidade" v-model="infoData.city" />
+              <input
+                required
+                type="text"
+                placeholder="Cidade"
+                v-model="infoData.city"
+              />
               <label>Estado</label>
-              <input 
+              <input
                 type="text"
                 placeholder="Estado"
                 v-model="infoData.state"
@@ -26,94 +32,100 @@
                 solo
               ></v-select>
 
-              <button class="waves-effect waves-light btn-small">Buscar</button>
+              <button class="text-sm-body-2 waves-effect waves-light btn-small">Buscar</button>
               <v-btn
-              v-on:click="this.locator"
-              class="col-md-2 offset-sm-1"
+                v-on:click="this.locator"
+                class="text-sm-body-2 col-md-4 offset-sm-1"
                 elevation="2"
-                x-small
-              >Minha Localização</v-btn>
+                medium
+                color="secondary"
+                >Minha Localização</v-btn
+              >
             </form>
+          </v-col>
+          <v-col cols="6" md="5" class="float-right">
+            <v-card class="ml-20" max-width="400">
+              <v-list-item two-line>
+                <v-list-item-content>
+                  <v-list-item-title class="headline">
+                    {{ this.informations["city_name"] }}
+                  </v-list-item-title>
+                  <v-list-item-subtitle
+                    >{{ this.informations["weather"]["description"]
+                    }}<span v-if="this.informations['pod']">, </span>
+                    <h9 v-if="this.informations['pod'] === 'd'"
+                      >está de dia.</h9
+                    >
+                    <h9 v-else-if="this.informations['pod'] === 'n'"
+                      >está de noite.</h9
+                    >
+                    <h9 class="red--text" v-else>
+                      Cidade não encontrada, verifique se digitou tudo
+                      certo.</h9
+                    >
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-card-text>
+                <v-row align="center">
+                  <v-col class="display-2" cols="7">
+                    {{ this.informations["temp"] }}&deg;C
+                  </v-col>
+                  <v-col cols="5">
+                    <img :src="this.iconText" />
+                  </v-col>
+                </v-row>
+              </v-card-text>
+
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon size="35">mdi-weather-windy</v-icon>
+                </v-list-item-icon>
+                <v-list-item-subtitle>{{
+                  parseInt(this.informations["wind_spd"] * 3.6) + " km/h"
+                }}</v-list-item-subtitle>
+              </v-list-item>
+
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon size="35">mdi-water-percent</v-icon>
+                </v-list-item-icon>
+                <v-list-item-subtitle>{{
+                  this.informations["rh"] + "%"
+                }}</v-list-item-subtitle>
+              </v-list-item>
+
+              <v-list>
+                <v-list-item>
+                  <v-list-item-title>Sensação Térmica</v-list-item-title>
+                  <v-list-item-subtitle class="text-right">
+                    {{ this.informations["app_temp"] }}&deg;C
+                  </v-list-item-subtitle>
+                </v-list-item>
+              </v-list>
+              <v-list>
+                <v-list-item>
+                  <v-list-item-title>Direção do Vento</v-list-item-title>
+                  <v-list-item-subtitle class="text-right">
+                    {{ this.informations["wind_cdir_full"] }}
+                  </v-list-item-subtitle>
+                </v-list-item>
+              </v-list>
+              <v-list>
+                <v-list-item>
+                  <v-list-item-title>Visibilidade</v-list-item-title>
+                  <v-list-item-subtitle class="text-right">
+                    {{ this.informations["vis"] + " km" }}
+                  </v-list-item-subtitle>
+                </v-list-item>
+              </v-list>
+
+              <v-divider></v-divider>
+            </v-card>
           </v-col>
         </v-flex>
       </v-row>
-
-      <v-card class="mx-auto" max-width="400">
-        <v-list-item two-line>
-          <v-list-item-content>
-            <v-list-item-title class="headline">
-              {{ this.informations["city_name"] }}
-            </v-list-item-title>
-            <v-list-item-subtitle
-              >{{ this.informations["weather"]["description"]
-              }}<span v-if="this.informations['pod']">, </span>
-              <h9 v-if="this.informations['pod'] === 'd'">está de dia.</h9>
-              <h9 v-else-if="this.informations['pod'] === 'n'"
-                >está de noite.</h9
-              >
-              <h9 class="red--text" v-else>
-                Cidade não encontrada, verifique se digitou tudo certo.</h9
-              >
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-card-text>
-          <v-row align="center">
-            <v-col class="display-2" cols="7">
-              {{ this.informations["temp"] }}&deg;C
-            </v-col>
-            <v-col cols="5">
-              <img :src="this.iconText" />
-            </v-col>
-          </v-row>
-        </v-card-text>
-
-        <v-list-item>
-          <v-list-item-icon>
-            <v-icon size="35">mdi-weather-windy</v-icon>
-          </v-list-item-icon>
-          <v-list-item-subtitle>{{
-            parseInt(this.informations["wind_spd"] * 3.6) + " km/h"
-          }}</v-list-item-subtitle>
-        </v-list-item>
-
-        <v-list-item>
-          <v-list-item-icon>
-            <v-icon size="35">mdi-water-percent</v-icon>
-          </v-list-item-icon>
-          <v-list-item-subtitle>{{
-            this.informations["rh"] + "%"
-          }}</v-list-item-subtitle>
-        </v-list-item>
-
-        <v-list>
-          <v-list-item>
-            <v-list-item-title>Sensação Térmica</v-list-item-title>
-            <v-list-item-subtitle class="text-right">
-              {{ this.informations["app_temp"] }}&deg;C
-            </v-list-item-subtitle>
-          </v-list-item>
-        </v-list>
-        <v-list>
-          <v-list-item>
-            <v-list-item-title>Direção do Vento</v-list-item-title>
-            <v-list-item-subtitle class="text-right">
-              {{ this.informations["wind_cdir_full"] }}
-            </v-list-item-subtitle>
-          </v-list-item>
-        </v-list>
-        <v-list>
-          <v-list-item>
-            <v-list-item-title>Visibilidade</v-list-item-title>
-            <v-list-item-subtitle class="text-right">
-              {{ this.informations["vis"] + " km" }}
-            </v-list-item-subtitle>
-          </v-list-item>
-        </v-list>
-
-        <v-divider></v-divider>
-      </v-card>
     </v-container>
   </div>
 </template>
@@ -122,7 +134,6 @@
 // @ is an alias to /src
 import Climate from "../services/getClimate";
 import ClimateByCoord from "../services/GetClimateByCoord";
-
 
 export default {
   name: "Home",
@@ -409,12 +420,11 @@ export default {
 
   methods: {
     Buscar() {
-
-          
       Climate.climate(this.infoData).then((resposta) => {
-        if(resposta.status != 200){ 
-          this.error = "Cidade não encontrada, verifique se digitou tudo certo.";}
-        else {
+        if (resposta.status != 200) {
+          this.error =
+            "Cidade não encontrada, verifique se digitou tudo certo.";
+        } else {
           let tudo = resposta.data;
           let esp = tudo.data;
           let climateInfo = esp[0];
@@ -431,11 +441,14 @@ export default {
 
     locator() {
       navigator.geolocation.getCurrentPosition(
-        position => {
+        (position) => {
           console.log(position.coords.latitude);
           console.log(position.coords.longitude);
 
-          ClimateByCoord.climate(position.coords.latitude, position.coords.longitude).then(resposta => {
+          ClimateByCoord.climate(
+            position.coords.latitude,
+            position.coords.longitude
+          ).then((resposta) => {
             let tudo = resposta.data;
             let esp = tudo.data;
             let climateInfo = esp[0];
@@ -445,13 +458,12 @@ export default {
               "https://www.weatherbit.io/static/img/icons/" +
               this.informations["weather"]["icon"] +
               ".png";
-          })
-
+          });
         },
-        error => {
+        (error) => {
           console.log(error.message);
-        },
-      )   
+        }
+      );
     },
   },
 };
